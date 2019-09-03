@@ -247,6 +247,10 @@ footer {
   top: 90%;
 }
 
+#page img {
+  border-radius: 3px;
+}
+
 .btn {
   position: relative;
   padding: 1rem 2rem;
