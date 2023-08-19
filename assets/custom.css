@@ -423,6 +423,14 @@ footer {
   transform: rotate(-45deg);
 }
 
+
+.real-estate {
+  background: white;
+  color: black;
+}
+
+
+
 /** DEFAULT STYLES **/
 
 .container {
