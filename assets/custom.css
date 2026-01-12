@@ -22,6 +22,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 0;
 }
 
 body {
@@ -41,6 +42,12 @@ a {
 
 a:hover {
   color: var(--accent-strong);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 img {
@@ -86,6 +93,22 @@ img {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+.nav-links a.active {
+  color: var(--accent);
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 999px;
 }
 
 .nav-toggle {
@@ -158,12 +181,17 @@ img {
   animation: fadeUp 0.9s ease both;
 }
 
+.hero-media {
+  animation: fadeUp 0.9s ease both;
+  animation-delay: 0.15s;
+}
+
 .eyebrow {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 0.75rem;
-  color: var(--muted);
+  color: #d6d1c7;
 }
 
 h1,
@@ -277,18 +305,17 @@ h1 span {
 }
 
 .photo {
-  width: min(260px, 70vw);
+  width: min(220px, 62vw);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background-image: url("images/kevin_headshot.jpg");
-  background-size: cover;
-  background-position: center;
+  object-fit: contain;
+  background-color: rgba(12, 17, 22, 0.6);
   box-shadow: var(--shadow);
   border: 4px solid rgba(245, 242, 234, 0.2);
 }
 
 .hero-card {
-  padding: 1.6rem;
+  padding: 1.3rem;
   border-radius: 18px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -325,13 +352,17 @@ h1 span {
   padding: 5rem 0;
 }
 
-#top,
+#top-anchor,
 #about,
 #real-estate,
 #travel,
 #skiing,
 #footer {
   scroll-margin-top: var(--nav-height);
+}
+
+#top-anchor {
+  scroll-margin-top: 0;
 }
 
 #page .section {
@@ -345,7 +376,7 @@ h1 span {
 .story-compact {
   list-style: none;
   display: grid;
-  gap: 0.9rem;
+  gap: 0.7rem;
   margin-top: 1rem;
 }
 
@@ -354,7 +385,7 @@ h1 span {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.6rem 0.8rem;
+  padding: 0.5rem 0.7rem;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -433,6 +464,8 @@ h1 span {
   background: var(--bg-soft);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+  content-visibility: auto;
+  contain-intrinsic-size: 220px 220px;
 }
 
 .travel-card img {
@@ -440,6 +473,20 @@ h1 span {
   width: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.travel-card.is-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  animation: shimmer 1.6s infinite;
+}
+
+.travel-card.loaded img {
+  opacity: 1;
 }
 
 .travel-card figcaption {
@@ -689,6 +736,15 @@ h1 span {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(60%);
   }
 }
 

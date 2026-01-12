@@ -21,19 +21,20 @@
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
+  <div id="top-anchor"></div>
   <nav id="navbar" class="site-nav">
     <div class="container nav-inner">
-      <a class="logo" href="#top">Kevin Sun</a>
+      <a class="logo" href="#top-anchor">Kevin Sun</a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">
         <span class="nav-toggle-bar"></span>
         <span class="sr-only">Toggle navigation</span>
       </button>
       <div id="nav-links" class="nav-links">
-        <a href="#about">About</a>
-        <a href="#real-estate">Real Estate</a>
-        <a href="#travel">Travel</a>
-        <a href="#skiing">Skiing</a>
-        <a href="#footer">Contact</a>
+        <a href="#about" data-nav="about">About</a>
+        <a href="#real-estate" data-nav="real-estate">Real Estate</a>
+        <a href="#travel" data-nav="travel">Travel</a>
+        <a href="#skiing" data-nav="skiing">Skiing</a>
+        <a href="#footer" data-nav="footer">Contact</a>
       </div>
     </div>
   </nav>
@@ -72,21 +73,25 @@
         </div>
       </div>
       <div class="hero-media">
-        <div class="photo" role="img" aria-label="Portrait of Kevin Sun"></div>
+        <img class="photo" src="assets/images/kevin_headshot.jpg" alt="Portrait of Kevin Sun" loading="lazy" decoding="async" fetchpriority="high">
         <div class="hero-card">
           <h3>Timeline</h3>
           <ul class="story-compact">
+            <li>
+              <span class="story-role"><i class="fas fa-university" aria-hidden="true"></i>Phillips Academy · Andover</span>
+              <span class="story-meta">2014 — 2018</span>
+            </li>
             <li>
               <span class="story-role"><i class="fas fa-university" aria-hidden="true"></i>UPenn M&amp;T · Data Science Masters</span>
               <span class="story-meta">2018 — 2022</span>
             </li>
             <li>
               <span class="story-role"><i class="fab fa-microsoft" aria-hidden="true"></i>Microsoft · Azure</span>
-              <span class="story-meta">2022 — 2024</span>
+              <span class="story-meta">2022 — 2025</span>
             </li>
             <li>
               <span class="story-role"><i class="fab fa-instagram" aria-hidden="true"></i>Meta · Instagram</span>
-              <span class="story-meta">2024 — Present</span>
+              <span class="story-meta">2025 — Present</span>
             </li>
           </ul>
         </div>
@@ -275,25 +280,30 @@
       }
 
       const manifestTag = document.getElementById('travel-manifest');
-      const loadImages = (files) => {
-        if (!Array.isArray(files)) {
-          return;
-        }
+        const loadImages = (files) => {
+          if (!Array.isArray(files)) {
+            return;
+          }
 
-        files.forEach((file) => {
-          const figure = document.createElement('figure');
-          figure.className = 'travel-card';
+          files.forEach((file) => {
+            const figure = document.createElement('figure');
+            figure.className = 'travel-card is-loading';
 
-          const img = document.createElement('img');
-          img.src = `assets/images/travel/${file}`;
-          img.alt = 'Travel photo';
-          img.loading = 'lazy';
-          img.decoding = 'async';
+            const img = document.createElement('img');
+            img.src = `assets/images/travel/${file}`;
+            img.alt = 'Travel photo';
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.fetchPriority = 'low';
+            img.addEventListener('load', () => {
+              figure.classList.remove('is-loading');
+              figure.classList.add('loaded');
+            });
 
-          figure.appendChild(img);
-          grid.appendChild(figure);
-        });
-      };
+            figure.appendChild(img);
+            grid.appendChild(figure);
+          });
+        };
 
       if (manifestTag) {
         try {
@@ -344,6 +354,60 @@
           closeModal();
         }
       });
+    })();
+
+    (function () {
+      const navLinks = Array.from(document.querySelectorAll('.nav-links a[data-nav]'));
+      const sections = navLinks
+        .map((link) => document.getElementById(link.dataset.nav))
+        .filter(Boolean);
+
+      if (!sections.length) {
+        return;
+      }
+
+      const linkById = new Map(navLinks.map((link) => [link.dataset.nav, link]));
+
+      const getNavOffset = () => {
+        const value = getComputedStyle(document.documentElement).getPropertyValue('--nav-height');
+        const parsed = parseFloat(value);
+        return Number.isFinite(parsed) ? parsed + 8 : 80;
+      };
+
+      let ticking = false;
+      const updateActive = () => {
+        const offset = getNavOffset();
+        let current = sections[0];
+
+        for (const section of sections) {
+          const top = section.getBoundingClientRect().top;
+          if (top - offset <= 0) {
+            current = section;
+          } else {
+            break;
+          }
+        }
+
+        navLinks.forEach((item) => item.classList.remove('active'));
+        const link = linkById.get(current.id);
+        if (link) {
+          link.classList.add('active');
+        }
+      };
+
+      const onScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(() => {
+            updateActive();
+            ticking = false;
+          });
+        }
+      };
+
+      updateActive();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
     })();
   </script>
   <script async src="https://www.instagram.com/embed.js"></script>
