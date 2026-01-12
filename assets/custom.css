@@ -3,6 +3,7 @@
   --bg: #0c1116;
   --bg-soft: #121923;
   --bg-glow: #1b2431;
+  --nav-height: 72px;
   --text: #f5f2ea;
   --muted: #c5c0b6;
   --accent: #f5c04f;
@@ -324,6 +325,15 @@ h1 span {
   padding: 5rem 0;
 }
 
+#top,
+#about,
+#real-estate,
+#travel,
+#skiing,
+#footer {
+  scroll-margin-top: var(--nav-height);
+}
+
 #page .section {
   background: var(--bg);
 }
@@ -404,6 +414,101 @@ h1 span {
   margin-bottom: 1rem;
 }
 
+.card-wide {
+  grid-column: 1 / -1;
+}
+
+.travel-grid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-auto-rows: 220px;
+}
+
+.travel-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.travel-card img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.travel-card figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.8rem 1rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(12, 17, 22, 0), rgba(12, 17, 22, 0.85));
+}
+
+.travel-card:hover img {
+  transform: scale(1.03);
+}
+
+.travel-card.wide {
+  grid-column: span 2;
+}
+
+.travel-card.tall {
+  grid-row: span 2;
+}
+
+.travel-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 12, 0.9);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+}
+
+.travel-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.travel-modal img {
+  max-width: min(1100px, 92vw);
+  max-height: 86vh;
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.travel-modal button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(12, 17, 22, 0.9);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
 .embed-grid {
   margin-top: 1.5rem;
   display: flex;
@@ -472,7 +577,7 @@ h1 span {
 
 .embed-card {
   flex: 0 0 auto;
-  width: min(420px, 85vw);
+  width: min(520px, 90vw);
   padding: 0.75rem;
   border-radius: 20px;
   background: rgba(10, 15, 20, 0.7);
@@ -492,11 +597,20 @@ h1 span {
 
 .embed-grid .instagram-media iframe {
   height: 540px !important;
+  width: 100% !important;
 }
 
 @media (max-width: 680px) {
   .gallery-btn {
     display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .travel-card.wide,
+  .travel-card.tall {
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 
@@ -623,8 +737,17 @@ h1 span {
 }
 
 @media (min-width: 1024px) {
+  .site-nav {
+    height: var(--nav-height);
+  }
+
+  .nav-inner {
+    height: 100%;
+    padding: 0;
+  }
+
   #header {
-    height: 100vh;
+    height: calc(100vh - var(--nav-height));
     display: flex;
     align-items: center;
   }

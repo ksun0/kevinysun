@@ -31,6 +31,7 @@
       <div id="nav-links" class="nav-links">
         <a href="#about">About</a>
         <a href="#real-estate">Real Estate</a>
+        <a href="#travel">Travel</a>
         <a href="#skiing">Skiing</a>
         <a href="#footer">Contact</a>
       </div>
@@ -73,7 +74,7 @@
       <div class="hero-media">
         <div class="photo" role="img" aria-label="Portrait of Kevin Sun"></div>
         <div class="hero-card">
-          <h3>Story</h3>
+          <h3>Timeline</h3>
           <ul class="story-compact">
             <li>
               <span class="story-role"><i class="fas fa-university" aria-hidden="true"></i>UPenn M&amp;T · Data Science Masters</span>
@@ -123,13 +124,43 @@
       </div>
     </section>
 
+    <section class="section" id="travel">
+      <div class="container">
+        <div class="section-title">
+          <p class="section-label">Travel</p>
+          <h2>Photography</h2>
+        </div>
+        <!-- travel-manifest:start -->
+        <script type="application/json" id="travel-manifest">
+          [
+            "biei_sunset.JPG",
+            "fuji_blossoms.jpg",
+            "fuji_sunrise_cherry_blossoms.jpg",
+            "fuji_sunrise_edited.jpg",
+            "heart_lake_foliage.jpg",
+            "sengen_fuji.jpg",
+            "shirahige_waterfall.JPG",
+            "shrine.jpeg",
+            "vermont_cows_foliage.jpg"
+          ]
+        </script>
+        <!-- travel-manifest:end -->
+        <div class="travel-grid" data-travel-grid></div>
+      </div>
+    </section>
+
+    <div class="travel-modal" id="travel-modal" aria-hidden="true">
+      <button type="button" aria-label="Close travel photo">×</button>
+      <img src="" alt="Travel photo">
+    </div>
+
     <section class="section" id="skiing">
       <div class="container section-grid">
         <div class="section-title">
           <p class="section-label">Skiing</p>
           <h2>On the Slopes</h2>
         </div>
-        <div class="card">
+        <div class="card card-wide">
           <p>Follow along on Instagram: <a href="https://www.instagram.com/kevinsun0.ski/" target="_blank" class="text-link">@kevinsun0.ski</a>.</p>
           <div class="embed-gallery">
             <button class="gallery-btn prev" type="button" aria-label="Scroll left">
@@ -235,6 +266,84 @@
 
       prevBtn.addEventListener('click', () => scrollByCard(-1));
       nextBtn.addEventListener('click', () => scrollByCard(1));
+    })();
+
+    (function () {
+      const grid = document.querySelector('[data-travel-grid]');
+      if (!grid) {
+        return;
+      }
+
+      const manifestTag = document.getElementById('travel-manifest');
+      const loadImages = (files) => {
+        if (!Array.isArray(files)) {
+          return;
+        }
+
+        files.forEach((file) => {
+          const figure = document.createElement('figure');
+          figure.className = 'travel-card';
+
+          const img = document.createElement('img');
+          img.src = `assets/images/travel/${file}`;
+          img.alt = 'Travel photo';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+
+          figure.appendChild(img);
+          grid.appendChild(figure);
+        });
+      };
+
+      if (manifestTag) {
+        try {
+          loadImages(JSON.parse(manifestTag.textContent));
+        } catch (error) {
+          return;
+        }
+      } else {
+        fetch('assets/images/travel/manifest.json')
+          .then((response) => response.json())
+          .then(loadImages)
+          .catch(() => {});
+      }
+    })();
+
+    (function () {
+      const modal = document.getElementById('travel-modal');
+      const modalImage = modal ? modal.querySelector('img') : null;
+      const closeBtn = modal ? modal.querySelector('button') : null;
+
+      if (!modal || !modalImage || !closeBtn) {
+        return;
+      }
+
+      const closeModal = () => {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImage.src = '';
+      };
+
+      document.addEventListener('click', (event) => {
+        const img = event.target.closest('.travel-card img');
+        if (img) {
+          modalImage.src = img.src;
+          modal.classList.add('open');
+          modal.setAttribute('aria-hidden', 'false');
+          return;
+        }
+
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
     })();
   </script>
   <script async src="https://www.instagram.com/embed.js"></script>
