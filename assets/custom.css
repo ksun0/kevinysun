@@ -164,7 +164,7 @@ img {
   position: relative;
   padding: 6rem 0 5rem;
   background: linear-gradient(120deg, rgba(12, 17, 22, 0.85), rgba(12, 17, 22, 0.6)),
-    url("images/shanghai_gold.jpg") center / cover no-repeat;
+    url("images/skinzthumbnail.png") center / cover no-repeat;
 }
 
 .hero-grid {

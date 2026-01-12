@@ -371,30 +371,48 @@
       const getNavOffset = () => {
         const value = getComputedStyle(document.documentElement).getPropertyValue('--nav-height');
         const parsed = parseFloat(value);
-        return Number.isFinite(parsed) ? parsed + 8 : 80;
+        return Number.isFinite(parsed) ? parsed : 72;
       };
 
-      let ticking = false;
-      const updateActive = () => {
-        const offset = getNavOffset();
-        let current = sections[0];
+      let positions = [];
+      let currentId = null;
 
-        for (const section of sections) {
-          const top = section.getBoundingClientRect().top;
-          if (top - offset <= 0) {
-            current = section;
+      const updatePositions = () => {
+        positions = sections.map((section) => ({
+          id: section.id,
+          top: section.offsetTop
+        }));
+      };
+
+      let clickLockUntil = 0;
+
+      const updateActive = () => {
+        if (Date.now() < clickLockUntil) {
+          return;
+        }
+        const offset = getNavOffset();
+        const target = window.scrollY + offset + 1;
+        let activeId = positions[0]?.id;
+
+        for (const position of positions) {
+          if (position.top <= target) {
+            activeId = position.id;
           } else {
             break;
           }
         }
 
-        navLinks.forEach((item) => item.classList.remove('active'));
-        const link = linkById.get(current.id);
-        if (link) {
-          link.classList.add('active');
+        if (activeId && activeId !== currentId) {
+          navLinks.forEach((item) => item.classList.remove('active'));
+          const link = linkById.get(activeId);
+          if (link) {
+            link.classList.add('active');
+            currentId = activeId;
+          }
         }
       };
 
+      let ticking = false;
       const onScroll = () => {
         if (!ticking) {
           ticking = true;
@@ -405,9 +423,21 @@
         }
       };
 
+      updatePositions();
       updateActive();
+      navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          navLinks.forEach((item) => item.classList.remove('active'));
+          link.classList.add('active');
+          currentId = link.dataset.nav;
+          clickLockUntil = Date.now() + 900;
+        });
+      });
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
+      window.addEventListener('resize', () => {
+        updatePositions();
+        onScroll();
+      });
     })();
   </script>
   <script async src="https://www.instagram.com/embed.js"></script>
