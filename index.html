@@ -160,28 +160,32 @@
     </div>
 
     <section class="section" id="skiing">
-      <div class="container section-grid">
-        <div class="section-title">
-          <p class="section-label">Skiing</p>
-          <h2>On the Slopes</h2>
+      <div class="container">
+        <div class="skiing-header">
+          <div class="section-title">
+            <p class="section-label">Skiing</p>
+            <h2>On the Slopes</h2>
+          </div>
+          <a href="https://www.instagram.com/kevinsun0.ski/" target="_blank" class="btn ghost ig-follow-btn">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+            @kevinsun0.ski
+          </a>
         </div>
-        <div class="card card-wide">
-          <p>Follow along on Instagram: <a href="https://www.instagram.com/kevinsun0.ski/" target="_blank" class="text-link">@kevinsun0.ski</a>.</p>
-          <div class="embed-gallery">
-            <button class="gallery-btn prev" type="button" aria-label="Scroll left">
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>
-            </button>
-            <div class="embed-grid" data-gallery>
-              <div class="embed-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DSVAtWqiegY/" data-instgrm-version="14"></blockquote>
-              </div>
-              <div class="embed-card">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTGMghzEZzp/" data-instgrm-version="14"></blockquote>
-              </div>
-            </div>
-            <button class="gallery-btn next" type="button" aria-label="Scroll right">
-              <i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </button>
+        <div class="embed-grid">
+          <div class="embed-card">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DUj1WYekW9J/" data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="embed-card">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTp4XfrkQKa/" data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="embed-card">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTokcJXEZ7Q/" data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="embed-card">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTGMghzEZzp/" data-instgrm-version="14"></blockquote>
+          </div>
+          <div class="embed-card">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DSVAtWqiegY/" data-instgrm-version="14"></blockquote>
           </div>
         </div>
       </div>
@@ -252,25 +256,6 @@
           closeNav();
         }
       });
-    })();
-
-    (function () {
-      const gallery = document.querySelector('[data-gallery]');
-      if (!gallery) {
-        return;
-      }
-
-      const prevBtn = gallery.parentElement.querySelector('.gallery-btn.prev');
-      const nextBtn = gallery.parentElement.querySelector('.gallery-btn.next');
-
-      const scrollByCard = (direction) => {
-        const card = gallery.querySelector('.embed-card');
-        const cardWidth = card ? card.offsetWidth : 320;
-        gallery.scrollBy({ left: direction * (cardWidth + 24), behavior: 'smooth' });
-      };
-
-      prevBtn.addEventListener('click', () => scrollByCard(-1));
-      nextBtn.addEventListener('click', () => scrollByCard(1));
     })();
 
     (function () {
